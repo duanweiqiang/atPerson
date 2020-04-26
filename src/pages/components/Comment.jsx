@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { message, Checkbox } from 'antd';
+import { getPerson } from './utils';
 // import TreeNode2 from '@components/EmployeeSelector/TreeNode';
 import style from './comment.less';
 
@@ -9,7 +10,7 @@ class Comment extends Component {
     super(props);
     this.state = {
       personDataList: [], //人员列表，默认前20个
-      curSelectItem: null, //当前选中的人员
+      curSelectItem: [], //当前选中的人员
       total: 0,
     };
     this.selectStartIndex = -1; //是否搜索@人员的开始位置
@@ -46,8 +47,7 @@ class Comment extends Component {
       personDataList.length > 0 && e.preventDefault(); //有下拉是阻止冒泡
       let targetIndex = 0;
       personDataList.forEach((item, index) => {
-        targetIndex =
-          item.employeeId === curSelectItem.employeeId ? index : targetIndex;
+        targetIndex = item.id === curSelectItem.id ? index : targetIndex;
       });
       if (e.keyCode === 40) {
         //down
@@ -112,7 +112,7 @@ class Comment extends Component {
   selectPerson = item => {
     const anchorNode = this.anchorNode;
     const selectStartIndex = this.selectStartIndex;
-    const atPresonDom = `&nbsp;<span style="background-color:#F4F4F6;padding: 3px 5px;border-radius: 3px;" id=${item.employeeId} name=${item.employeeName}>@${item.employeeName}</span>&nbsp;`;
+    const atPresonDom = `&nbsp;<span style="background-color:#F4F4F6;padding: 3px 5px;border-radius: 3px;" id=${item.id} name=${item.employeeName}>@${item.employeeName}</span>&nbsp;`;
     let reasonDom = '';
     const range = document.createRange();
     let targetDomIndex = 0;
@@ -153,17 +153,13 @@ class Comment extends Component {
   };
   // 根据条件获取=>人员信息列表
   getPersonByText = async (selectText = '') => {
-    const result = await this.props.getPerson(selectText);
-    //
-    if (result.code === 200) {
-      this.setState({
-        personDataList: result.data.records || [],
-        total: result.data?.total || 0,
-        curSelectItem: (result.data.records || [])[0],
-      });
-    } else {
-      message.error(result.data.msg);
-    }
+    const result = getPerson(selectText);
+    console.log(result, '&&&');
+    this.setState({
+      personDataList: result.personList || [],
+      total: result.total || 0,
+      curSelectItem: (result.personList || [])[0],
+    });
   };
   resetDom = () => {
     textDom = null;
@@ -190,23 +186,23 @@ class Comment extends Component {
         </div>
         {personDataList.length > 0 && (
           <div className={style.personMenuList}>
-            {
-              // personDataList.map((item,index,key)=>{
-              //   return<div
-              //     key={key}
-              //     style={curSelectItem.employeeId===item.employeeId?{backgroundColor:'rgba(12,140,246,0.1)'}:{}}
-              //     className={style.personItem}
-              //     onClick={()=>this.selectPerson(item)}
-              //   >
-              //       <TreeNode2
-              //           {...item}
-              //           parentNode="dropdownClassName"
-              //           checkable={false}
-              //           text={this.selectText}
-              //       />
-              //   </div>
-              // })
-            }
+            {personDataList.map((item, index) => {
+              if (index >= 5) return;
+              return (
+                <div
+                  key={item.id}
+                  style={
+                    curSelectItem?.id === item.id
+                      ? { backgroundColor: 'rgba(12,140,246,0.1)' }
+                      : {}
+                  }
+                  className={style.personItem}
+                  onClick={() => this.selectPerson(item)}
+                >
+                  <span>{item.name}</span>
+                </div>
+              );
+            })}
             {total > 5 && (
               <div
                 style={{ textAlign: 'center', color: '#ADAFB7', fontSize: 12 }}
