@@ -29,8 +29,8 @@ class Comment extends Component {
   componentWillUnmount() {
     document.removeEventListener('keydown', this.keydownEvent, false);
   }
+  //键盘事件
   keydownEvent = e => {
-    //键盘事件
     if (e.keyCode === 8) {
       const selection = document.getSelection();
       this.anchorNode = selection.anchorNode;
@@ -62,6 +62,7 @@ class Comment extends Component {
       this.setState({ curSelectItem: personDataList[targetIndex] });
     }
     if (e.keyCode === 13) {
+      //enter
       e.preventDefault();
       const { curSelectItem } = this.state;
       curSelectItem && this.selectPerson(curSelectItem);
