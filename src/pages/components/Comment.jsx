@@ -101,13 +101,12 @@ class Comment extends Component {
       this.selectStartIndex = -1;
       this.setState({ personDataList: [] });
     }
-    // this.props.stateChange(textDom);
   };
   //选择@人员
   selectPerson = item => {
     const anchorNode = this.anchorNode;
     const selectStartIndex = this.selectStartIndex;
-    const atPresonDom = `&nbsp;<span style="background-color:#F4F4F6;padding: 3px 5px;border-radius: 3px;" id=${item.id} name=${item.employeeName}>@${item.employeeName}</span>&nbsp;`;
+    const atPresonDom = `&nbsp;<span style="background-color:#F4F4F6;padding: 3px 5px;border-radius: 3px;" id=${item.id} name=${item.name}>@${item.name}</span>&nbsp;`;
     let reasonDom = '';
     const range = document.createRange();
     let targetDomIndex = 0;
@@ -166,7 +165,7 @@ class Comment extends Component {
     return (
       <>
         <div className={style.comment}>
-          <div style={{ padding: '3px 10px 0 0' }}>
+          <div style={{ padding: '3px 10px 15px 0' }}>
             <label className={style.pass}>评论内容</label>
           </div>
           <div
