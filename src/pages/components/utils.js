@@ -276,13 +276,13 @@ const mapPerson = [
   },
 ];
 
-export const getPerson = text => {
+export const getPerson = (text, count) => {
   const p = mapPerson.filter(e => e.name.indexOf(text) > -1);
   p.map(i => {
     i.id = createUuid();
   });
   return {
-    personList: p,
+    personList: p.slice(0, count),
     total: p.length,
   };
 };

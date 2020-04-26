@@ -70,11 +70,6 @@ class Comment extends Component {
   };
   //评论@人员
   onChangeAtPerson = () => {
-    // if (textDom && textDom.innerText && textDom.innerText.length > 0) {
-    //   this.props.setOkDisable(false);
-    // } else {
-    //   this.props.setOkDisable(true);
-    // }
     const selection = document.getSelection();
     this.anchorNode = selection.anchorNode;
     const currentChar = selection.focusNode.nodeValue?.charAt(
@@ -153,8 +148,7 @@ class Comment extends Component {
   };
   // 根据条件获取=>人员信息列表
   getPersonByText = async (selectText = '') => {
-    const result = getPerson(selectText);
-    console.log(result, '&&&');
+    const result = getPerson(selectText, 5);
     this.setState({
       personDataList: result.personList || [],
       total: result.total || 0,
@@ -169,7 +163,6 @@ class Comment extends Component {
     if (!textDom) {
       textDom = document.getElementById('textArea');
     }
-    // this.okDisabled = textDom?.innerText?.length>0?false:true;
     return (
       <>
         <div className={style.comment}>
@@ -187,7 +180,6 @@ class Comment extends Component {
         {personDataList.length > 0 && (
           <div className={style.personMenuList}>
             {personDataList.map((item, index) => {
-              if (index >= 5) return;
               return (
                 <div
                   key={item.id}
