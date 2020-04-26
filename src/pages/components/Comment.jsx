@@ -30,7 +30,7 @@ class Comment extends Component {
     document.removeEventListener('keydown', this.keydownEvent, false);
   }
   keydownEvent = e => {
-    //
+    //键盘事件
     if (e.keyCode === 8) {
       const selection = document.getSelection();
       this.anchorNode = selection.anchorNode;
@@ -114,6 +114,7 @@ class Comment extends Component {
       if (each.nodeName === 'SPAN') {
         reasonDom += each.outerHTML;
       } else if (anchorNode === each) {
+        //当前节点
         targetDomIndex = index;
         const tempEachDom = each;
         const dom1 = tempEachDom.data.substring(0, selectStartIndex - 1);
